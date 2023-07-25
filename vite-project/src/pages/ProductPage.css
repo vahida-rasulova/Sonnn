@@ -12,12 +12,12 @@
 #root {
   width: 100%;
 }
-
+/* 
 .container {
   width: 1140px;
   max-width: 95%;
   margin: 0 auto;
-}
+} */
 
 .single-card-navigation {
   display: flex;

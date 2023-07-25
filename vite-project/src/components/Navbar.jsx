@@ -1,16 +1,17 @@
 import React from "react";
-import { useRef ,useState} from "react";
+import { useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { FaBars, FaTimes } from "react-icons/fa";
-import {FiSearch } from "react-icons/fi";
-import {TbHeartFilled,TbHeart } from "react-icons/tb";
-import {HiOutlineShoppingBag} from "react-icons/hi";
+import { FiSearch } from "react-icons/fi";
+import { TbHeartFilled, TbHeart } from "react-icons/tb";
+import { HiOutlineShoppingBag } from "react-icons/hi";
+import { AiOutlineUser } from "react-icons/ai";
 
 import { connect } from "react-redux";
 function Navbar({ dispatch, basketCount }) {
-  const[barActiveInput, setBarActiveInput]=useState(false)
-  
+  const [barActiveInput, setBarActiveInput] = useState(false)
+
   const navRef = useRef();
   const showNavbar = () => {
     navRef.current.classList.toggle("responsive_nav");
@@ -26,6 +27,9 @@ function Navbar({ dispatch, basketCount }) {
       <div className="navbar">
         <div className="container">
           <nav>
+            <Link to="/"><div className="nav-img">
+              <img src="./images/Home/Green.svg" alt="" />
+            </div></Link>
             <div className="nav-list">
               <ul className="ul-bir ul-home">
                 <li>
@@ -39,40 +43,38 @@ function Navbar({ dispatch, basketCount }) {
                   {" "}
                   <NavLink to="/about">About Us</NavLink>
                 </li>
-               
+                <li>
+                  {" "}
+                  <NavLink to="/faqs">FAQ</NavLink>
+                </li>
+                <li>
+                  <NavLink to="/blog">Blog</NavLink>
+                </li>
+
+                <li>
+                  {" "}
+                  <NavLink to="/contact">Contact</NavLink>
+                </li>
               </ul>
             </div>
             <button className="icon__nav" onClick={showNavbar}>
               <FaBars />
             </button>
-            <Link to="/"><div className="nav-img">
-              <img src="./images/Home/Green.svg" alt="" />
-            </div></Link>
+
             <div className="nav-two">
-              <div className="nav-list">
+              {/* <div className="nav-list">
                 <ul className="ul-bir">
-                  <li>
-                    {" "}
-                    <NavLink to="/faqs">FAQ</NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/login">Login</NavLink>
-                  </li>
-             
-                  <li>
-                    {" "}
-                    <NavLink to="/contact">Contact</NavLink>
-                  </li>
+                  
                 </ul>
-              </div>
-          
+              </div> */}
+
               <div className="nav-icon">
                 <NavLink to="/cart">
                   {" "}
                   <div className="icon-shop">
-                <div className="nav-shop-icon">
-                  <HiOutlineShoppingBag/>
-                </div>
+                    <div className="nav-shop-icon">
+                      <HiOutlineShoppingBag />
+                    </div>
                     <span className="icn">
                       {basketCount ? `${basketCount}` : "0"}
                     </span>
@@ -81,24 +83,35 @@ function Navbar({ dispatch, basketCount }) {
 
                 <NavLink to="/favorites">
                   {" "}
-                 <div className="nav-heart">
-                  
-                  <TbHeartFilled/>
-                 </div>
+                  <div className="nav-heart">
+
+                    <TbHeartFilled />
+                  </div>
                 </NavLink>
-                
+
                 {/* <div className="searchBar">
                   <input type="text" placeholder="Search" className={barActiveInput ? 'searcBarInput barActiveInput':'searcBarInput'}/>
                   <button type="submit" className="nav-searchBtn" onClick={() => setBarActiveInput(!barActiveInput)}><FiSearch/></button>
                
                 </div> */}
-               
+
               </div>
-           
+              <NavLink to="/login"><div className="user-icon">
+                <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXNlcnxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80" alt="" />
+                {/* <NavLink to="/login"><AiOutlineUser/></NavLink> */}
+              </div></NavLink>
+
               <div className="nav-list" ref={navRef}>
-                <div className="nav-img-res">
-                  <img src="./images/Home/Green.svg" alt="" />
+                <div className="nav-meridian">
+                  <div className="nav-img-res">
+                    <img src="./images/Home/Green.svg" alt="" />
+
+                  </div>
+                  <button onClick={showNavbar} className=" close-icon">
+                    <FaTimes />
+                  </button>
                 </div>
+
                 <ul className="ul-iki">
                   <li onClick={showNavbar}>
                     <NavLink to="/">Home</NavLink>
@@ -108,7 +121,7 @@ function Navbar({ dispatch, basketCount }) {
                   </li>
                   <li onClick={showNavbar}>
                     {" "}
-                    <NavLink to="/login">Login</NavLink>
+                    <NavLink to="/blog">Blog</NavLink>
                   </li>
                   <li onClick={showNavbar}>
                     {" "}
@@ -125,12 +138,10 @@ function Navbar({ dispatch, basketCount }) {
                   </li>
                 </ul>
 
-                <button onClick={showNavbar} className="icon__nav close-icon">
-                  <FaTimes />
-                </button>
+
               </div>
-      
-             
+
+
             </div>
           </nav>
         </div>
