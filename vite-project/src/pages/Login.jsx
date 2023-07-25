@@ -4,6 +4,8 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai"
 import { FaLinkedinIn, FaFacebookF, FaGoogle,FaTwitter} from "react-icons/fa"
 
 import "./Login.css"
+
+
 function Sign() {
     useEffect(() => {
         document.title = 'Login';
@@ -36,17 +38,79 @@ function Sign() {
 
     }
 
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+  
+    const handleLogin = async (e) => {
+        e.preventDefault();
+      try {
+        const response = await fetch('http://127.0.0.1:8000/api/login/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data.token);
+     
+          setErrorMessage(''); 
+        } else {
+          const errorData = await response.json();
+          setErrorMessage(errorData.error || 'Unknown error occurred.');
+        }
+      } catch (error) {
+        console.error(error);
+        setErrorMessage('Unknown error occurred.');
+      }
+    };
+
+      const [Rusername, RsetUsername] = useState('');
+      const [Rpassword, RsetPassword] = useState('');
+      const [email, setEmail] = useState('');
+    
+
+      const handleRegister = async () => {
+        try {
+          const response = await fetch('/api/register/', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ Rusername, Rpassword, email }),
+          });
+      
+          if (!response.ok) {
+            throw new Error('Registration failed');
+          }
+      
+          const data = await response.json();
+          console.log(data.message);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+
+
     return (
         <section className='login'>
             <div className={`container-login ${addclass}`} id='container-login'>
                 {/* <div className="login-col"> */}
                 <div className={`form-container ${signUp} `}>
                     <form >
+              
                         <h1>Create Account</h1>
-                        <input type="text" placeholder='NAME' />
-                        <input type="email" placeholder='EMAIL' />
+                        
+                        <input type="text" placeholder='USERNAME' onChange={(e) => RsetUsername(e.target.value)} />
+                        <input type="email" placeholder='EMAIL' onChange={(e) => setEmail(e.target.value)} />
                         <div className="pasword-icon">
-                            <input type={passwordType} placeholder='PASSWORD' />
+                            <input type={passwordType} placeholder='PASSWORD' onChange={(e) => RsetPassword(e.target.value)} />
                             <div className='pas-icons' onClick={handelToggle}>
                                 {passwordIcon}
                             </div>
@@ -54,7 +118,7 @@ function Sign() {
                         <div className="remember-me">
                             <input type="checkbox" /><p>I agree  <b>Terms </b>the Privacy Policy</p>
                         </div>
-                        <button className='loginBtn' type='submit'>REGISTER</button>
+                        <button className='loginBtn' type='submit'  onClick={handleRegister}>REGISTER</button>
 
                         <div className="or-sign">
                             <hr />
@@ -83,9 +147,10 @@ function Sign() {
                 <div className={`form-container  ${signIn}`}>
                     <form >
                         <h1>Login</h1>
-                        <input type="email" placeholder='EMAIL' />
+                        {errorMessage && <div>{errorMessage}</div>}
+                        <input type="text" placeholder='USERNAME' onChange={(e) => setUsername(e.target.value)}/>
                         <div className="pasword-icon">
-                            <input type={passwordType} placeholder='PASSWORD' />
+                            <input type={passwordType} placeholder='PASSWORD' onChange={(e) => setPassword(e.target.value)}/>
                             <div className='pas-icons' onClick={handelToggle}>
                                 {passwordIcon}
                             </div>
@@ -94,7 +159,7 @@ function Sign() {
                             <input type="checkbox" /><p>Remember me</p>
                         </div>
 
-                        <button className='loginBtn' type='submit'>LOGIN</button>
+                        <button className='loginBtn' type='submit' onClick={handleLogin} >LOGIN</button>
                         <div className="or-sign">
                             <hr />
                             <span className='login-span'>or Login Up with</span>
