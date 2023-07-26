@@ -10,6 +10,7 @@ import { RiSearch2Line } from "react-icons/ri";
 import { BiFilterAlt } from "react-icons/bi";
 import { SlClose } from "react-icons/sl";
 import ScrollToTop from "react-scroll-to-top";
+import { AiOutlineSearch } from "react-icons/ai";
 
 function Collection() {
   useEffect(() => {
@@ -38,6 +39,7 @@ function Collection() {
     search: "",
     lower: 100,
     upper: 10000,
+    rating: "",
   });
   let filteredProducts = products
     .filter((product) => {
@@ -80,16 +82,81 @@ function Collection() {
 
   const end = start + productPerPage;
 
+  const [selectedRating, setSelectedRating] = useState(1);
+  const searchInputRef = useRef(null);
+
+  const handleRatingSelect = (rating) => {
+    setSelectedRating(rating);
+  };
+
   const resetFilters = () => {
     setFilters({
       category: "",
       price: "",
       search: "",
-      lower: 100,
+      lower: 0,
       upper: 10000,
     });
-    filteredProducts=filters
+    setSelectedRating(1);
+    if (searchInputRef.current) {
+      searchInputRef.current.value = "";
+    }
+    var checkboxes = document.getElementsByName("discount");
+    checkboxes.forEach(function(checkbox) {
+      checkbox.checked = false;
+    });
   };
+
+  const RatingFilter = ({ selectedRating, onRatingSelect }) => {
+    const ratings = [1, 2, 3, 4, 5];
+    return (
+      <div>
+        <h1 className="ratingh1">Rating</h1>
+        <div>
+          {ratings.map((rating) => (
+            <span
+              className="rating-select"
+              key={rating}
+              onClick={() => onRatingSelect(rating)}
+              style={{ color: rating <= selectedRating ? "gold" : "#d8d7d0" }}
+            >
+              &#9733;
+            </span>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    if (!isNaN(value)) {
+      const updatedValue = value.trim();
+      document.getElementById(id).value = updatedValue;
+      setFilters((prevFilters) => ({ ...prevFilters, [id]: updatedValue }));
+    }
+  };
+  const handleFilter = (e) => {
+    const updatedFilters = {
+      ...filters,
+      lower: document.getElementById("lower").value,
+      upper: document.getElementById("upper").value,
+    };
+
+    setFilters(updatedFilters);
+  };
+
+  const applyFilter = () => {
+   
+    const selectedPrice = document.querySelector('input[name="price"]:checked').id;
+    const [lower, upper] = selectedPrice.split('-').map(Number);
+    setFilters({
+      ...filters,
+      lower: lower,
+      upper: upper,
+    });
+  };
+
   return (
     <>
       <div className="container">
@@ -171,49 +238,46 @@ function Collection() {
               <h1 className="priceh1">Price Range</h1>
               <div className="wrapper">
                 <fieldset className="filter-price">
-                  <div className="price-coll">
-                    <div className="slder">
-                      <div className="progres-slder"></div>
-                    </div>
-                    <div className="price-field">
-                      <input
-                        type="range"
-                        min="200"
-                        max="10000"
-                        value={filters.lower}
-                        id="lower"
-                        onChange={(e) => lowerHandle(e)}
-                      />
-                      <input
-                        type="range"
-                        min="200"
-                        max="10000"
-                        value={filters.upper}
-                        id="upper"
-                        onChange={(e) => handleUpper(e)}
-                      />
-                    </div>
-                  </div>
                   <div className="price-wrap">
                     <div className="price-container">
                       <div className="price-wrap-1">
-                        <label htmlFor="one">$</label>
-                        <input id="one" value={filters.lower} />
+                        <input
+                          id="lower"
+                          value={filters.lower}
+                          placeholder="Min price"
+                          onChange={handleChange}
+                        />
                       </div>
-                      <div className="price-wrap_line"> - </div>
+                      <div className="price-wrap_line"> -</div>
                       <div className="price-wrap-2">
-                        <label htmlFor="two">$</label>
-                        <input id="two" value={filters.upper} />
+                        <input
+                          id="upper"
+                          value={filters.upper}
+                          placeholder="Max price"
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="price-result">
+                        <button
+                          onClick={handleFilter}
+                          style={{
+                            cursor: "pointer",
+                            width: "30px",
+                            height: "30px",
+                            marginLeft: "5px",
+                            backgroundColor: "#b58269",
+                            border: "None",
+                            color: "white",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <AiOutlineSearch style={{ fontSize: "20px" }} />
+                        </button>
                       </div>
                     </div>
-                    <button
-                      className="price-title"
-                      onClick={() => {
-                        console.log("price");
-                      }}
-                    >
-                      Clear filter
-                    </button>
+                    
                   </div>
                 </fieldset>
               </div>
@@ -229,6 +293,7 @@ function Collection() {
                 onChange={(e) =>
                   setFilters({ ...filters, search: e.target.value })
                 }
+                ref={searchInputRef}
               />
               <span className="searc-icon-ri">
                 <RiSearch2Line />
@@ -268,51 +333,138 @@ function Collection() {
               <h1 className="priceh1">Price Range</h1>
               <div className="wrapper">
                 <fieldset className="filter-price">
-                  <div className="price-coll">
-                    <div className="slder">
-                      <div className="progres-slder"></div>
-                    </div>
-                    <div className="price-field">
-                      <input
-                        type="range"
-                        min="200"
-                        max="10000"
-                        value={filters.lower}
-                        id="lower"
-                        onChange={(e) => lowerHandle(e)}
-                      />
-                      <input
-                        type="range"
-                        min="200"
-                        max="10000"
-                        value={filters.upper}
-                        id="upper"
-                        onChange={(e) => handleUpper(e)}
-                      />
-                    </div>
-                  </div>
                   <div className="price-wrap">
-                    <div className="price-container">
+                    <div
+                      className="price-container"
+                      style={{ marginBottom: "10px" }}
+                    >
                       <div className="price-wrap-1">
-                        <label htmlFor="one">$</label>
-                        <input id="one" value={filters.lower} />
+                        <input
+                          id="lower"
+                          value={filters.lower}
+                          placeholder="Min price"
+                          onChange={handleChange}
+                        />
                       </div>
-                      <div className="price-wrap_line"> - </div>
+                      <div className="price-wrap_line"> -</div>
                       <div className="price-wrap-2">
-                        <label htmlFor="two">$</label>
-                        <input id="two" value={filters.upper} />
+                        <input
+                          id="upper"
+                          value={filters.upper}
+                          placeholder="Max price"
+                          onChange={handleChange}
+                        />
+                      </div>
+                      
+                    </div>
+                    <div class="price-check-filter">
+                      <div className="price-column-1">
+                      <label for="0-1000">
+                        <input
+                          type="radio"
+                          id="0-1000"
+                          name="price"
+                          onChange={applyFilter}
+                        />
+                        <span class="checkmark"></span>
+                        0-1000
+                      </label>
+                      <br />
+                      <label for="1000-2000">
+                        <input
+                          type="radio"
+                          id="1000-2000"
+                          name="price"
+                          onChange={applyFilter}
+                        />
+                        <span class="checkmark"></span>
+                        1000-2000
+                      </label>
+                      <br />
+                      <label for="2000-4000">
+                        <input
+                          type="radio"
+                          id="2000-4000"
+                          name="price"
+                          onChange={applyFilter}
+                        />
+                        <span class="checkmark"></span>
+                        2000-4000
+                      </label>
+                      <br />
+                      </div>
+                      <div className="price-column-2">
+                      <label for="4000-6000">
+                        <input
+                          type="radio"
+                          id="4000-6000"
+                          name="price"
+                          onChange={applyFilter}
+                        />
+                        <span class="checkmark"></span>
+                        4000-6000
+                      </label>
+                      <br />
+                      <label for="6000-8000">
+                        <input
+                          type="radio"
+                          id="6000-8000"
+                          name="price"
+                          onChange={applyFilter}
+                        />
+                        <span class="checkmark"></span>
+                        6000-8000
+                      </label>
+                      <br />
+                      <label for="8000-10000">
+                        <input
+                          type="radio"
+                          id="8000-10000"
+                          name="price"
+                          onChange={applyFilter}
+                        />
+                        <span class="checkmark"></span>
+                        8000-10000
+                      </label>
                       </div>
                     </div>
-                    <span
-                      className="price-title"
-                      onClick={() => resetFilters()}
-                    >
-                      Clear filter
-                    </span>
                   </div>
                 </fieldset>
               </div>
             </div>
+            <div className="rating-filter">
+              <RatingFilter
+                selectedRating={selectedRating}
+                onRatingSelect={handleRatingSelect}
+              />
+            </div>
+
+            <div class="discount-filter">
+              <label for="discounted-checkbox">
+                <input
+                  type="radio"
+                  id="discounted-checkbox"
+                  name="discount"
+               
+                />
+                <span class="checkmark"></span>
+                Discounted
+              </label>
+
+              <label for="non-discounted-checkbox">
+                <input
+                  type="radio"
+                  id="non-discounted-checkbox"
+                  name="discount"
+                  
+                />
+                <span class="checkmark"></span>
+                Non-Discounted
+              </label>
+            </div>
+            <button className="clear-filter" onClick={resetFilters}>
+              Clear filter
+            </button>
           </div>
           <div className="product-pagination">
             <div className="sort-by">

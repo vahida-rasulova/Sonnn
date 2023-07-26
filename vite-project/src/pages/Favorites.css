@@ -39,7 +39,7 @@
   align-items: start;
   flex-direction: column;
 transition: 1s;
-border-radius: 10px;
+border-radius: 20px;
 overflow: hidden;
 gap: 20px;
 height: 380px;

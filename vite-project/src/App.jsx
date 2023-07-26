@@ -1,5 +1,5 @@
 import "./App.css";
-
+import Register from "./pages/Register"
 import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Contact from "./pages/Contact";
@@ -45,6 +45,7 @@ function App({ dispatch }) {
         <Route path="/about" element={<About />} />
         <Route path="/products" element={<Collection />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/favorites" element={<Favorites />} />
